@@ -1,0 +1,20 @@
+package edu.swu.ctoypro;
+
+import com.google.gson.JsonObject;
+import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+
+// 내가 어떤 요청을 어떻게 보낼건지 메서드 정의
+public interface JokeService {
+
+    @GET("jokes/categories") // 카테고리 가져와달라
+    Call<JokeData> getJoke(String joke);
+
+}
