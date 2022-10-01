@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     
     ActivityMainBinding binding;
+    List<JokeData> items;
     /*Spinner spinner;
     ProgressBar progressBar;
     JokeService jokeService;
@@ -34,20 +36,22 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater()); //바인딩 클래스의 인스턴스 생성
         setContentView(binding.getRoot()); //getRoot메서드로 레이아웃 내부의 최상의 뷰의 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시
 
+        items = new ArrayList<>();
 
         ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
 //        ProgressBar mDialog = new ProgressBar(MainActivity.this);
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor()).build();
 
-
         JokeService jokeService = ApiClient.getClient().create(JokeService.class);
+
         Call<List<String>> call = jokeService.getJoke();
         jokeService.getJoke().enqueue(new Callback<List<String>>() { // 리스트값 받아옴
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                List<String> jokeData = response.body();
-                pDialog.dismiss();
+
+                //List<String> jokeData = response.body();
+                //pDialog.dismiss();
                 //반투명 사라짐
             }
 
@@ -91,3 +95,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
+/*스피너 연결?
+ ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.spinner_array, R.layout.spinner_layout);
+        adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        binding.homeSpinner.setAdapter(adapter);
+        */
