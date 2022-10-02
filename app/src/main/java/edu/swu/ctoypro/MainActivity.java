@@ -1,11 +1,21 @@
 package edu.swu.ctoypro;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +33,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     
     ActivityMainBinding binding;
-    List<JokeData> items;
-    /*Spinner spinner;
-    ProgressBar progressBar;
-    JokeService jokeService;
+    List<String> jokelist;
+    String jokevalue;
     TextView responseText;
-    ImageView img;*/
+    Spinner spinner;
+    ProgressBar progressBar;
+    ImageButton imgBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +46,14 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater()); //바인딩 클래스의 인스턴스 생성
         setContentView(binding.getRoot()); //getRoot메서드로 레이아웃 내부의 최상의 뷰의 인스턴스를 활용하여 생성된 뷰를 액티비티에 표시
 
-        items = new ArrayList<>();
+        jokelist = new ArrayList<>();
+
+        responseText = binding.homeTxt;
+        Spinner spinner = binding.homeSpinner;
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, jokelist);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         ProgressDialog pDialog = new ProgressDialog(MainActivity.this);
 //        ProgressBar mDialog = new ProgressBar(MainActivity.this);
@@ -45,14 +62,17 @@ public class MainActivity extends AppCompatActivity {
 
         JokeService jokeService = ApiClient.getClient().create(JokeService.class);
 
-        Call<List<String>> call = jokeService.getJoke();
         jokeService.getJoke().enqueue(new Callback<List<String>>() { // 리스트값 받아옴
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                List<String> jokelist = response.body();
+                Log.d("category", jokelist.toString());
+                try {
+                    //Log.v("value", responseText.toString());
 
-                //List<String> jokeData = response.body();
-                //pDialog.dismiss();
-                //반투명 사라짐
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -61,24 +81,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        jokeService.getJokeData("value").enqueue(new Callback<List<String>>() {
+        jokeService.getJokeData("value").enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                
+            public void onResponse(Call<String> call, Response<String> response) {
+                //Call<String> getJokeData(@Query("category") String category);
+                //List<String> jokelist = response.body();
+                Log.d("value", responseText.toString());
+                try {
+                    //Log.v("value", responseText.toString());
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
 
             }
         });
-        
-        binding.img.setOnClickListener(new View.OnClickListener() {
+
+        binding.homeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               // responseText.setText();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        binding.imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //스피너에서 선택한 value에 맞는 joke로 바뀜
             }
         });
+
+
 
     }
 
@@ -95,9 +138,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-/*스피너 연결?
- ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.spinner_array, R.layout.spinner_layout);
-        adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
-        binding.homeSpinner.setAdapter(adapter);
-        */

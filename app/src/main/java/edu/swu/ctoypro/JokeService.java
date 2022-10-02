@@ -19,7 +19,7 @@ public interface JokeService {
     Call<List<String>> getJoke();
 
     @GET("jokes/categories/random") // value값
-    Call<List<String>> getJokeData(@Query("category") String category);
+    Call<String> getJokeData(@Query("value") String value);
     // value값 존재 -> Query 써야 됨
 
 
